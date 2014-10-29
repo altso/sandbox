@@ -1,1 +1,1 @@
-gci env:
+gci env:BUILD_VCS_NUMBER
