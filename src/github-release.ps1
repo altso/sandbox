@@ -31,14 +31,3 @@ Foreach ($artifact in $artifacts)
     }
 }
 
-$artifacts = @("src")
-Foreach ($artifact in $artifacts)
-{
-    Write-Host ("Looking for files in {0}..." -f $artifact)
-    $files = gci $artifact | where { ! $_.PSIsContainer }
-    Foreach ($file in $files)
-    {
-        Write-Host ("Uploading {0} to GitHub..." -f $file.FullName, $uploadUrl)
-    }
-}
-
