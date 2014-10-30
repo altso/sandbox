@@ -1,7 +1,4 @@
-$PSVersionTable.PSVersion
-
-$username = "81b00ad1ab7d38804f4cc69002bff2db0af1e3ae"
-$password = ""
+Param([string]$username, [string]$password)
 
 $hash = (gci env:BUILD_VCS_NUMBER).Value
 $version = (gci env:BUILD_NUMBER).Value
@@ -15,9 +12,6 @@ $response = Invoke-RestMethod "https://api.github.com/repos/altso/sandbox/releas
 gci -Recurse
 
 [array]$artifacts = @("src")
-$artifacts.GetType()
-$artifacts.Length
-$artifacts[0]
 
 Foreach ($artifact in $artifacts)
 {
