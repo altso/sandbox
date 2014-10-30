@@ -16,6 +16,8 @@ gci -Recurse
 
 [array]$artifacts = @("src")
 $artifacts.GetType()
+$artifacts.Length
+$artifacts[0]
 
 foreach ($artifact in $artifacts)
 {
