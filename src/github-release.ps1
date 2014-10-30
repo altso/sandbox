@@ -20,12 +20,12 @@ $artifacts[0]
 foreach ($artifact in $artifacts)
 {
     Write-Host "foreach #1"
-    $files = gci $artifact | where { ! $_.PSIsContainer }
-    foreach ($file in $files)
-    {
-        Write-Host "foreach #2"
-        $uploadUrl = $response.upload_url -replace "\{\?name\}", ("?name={0}" -f $file.Name)
-        Write-Host ("Uploading {0} to {1}..." -f $file.FullName, $uploadUrl)
-        Invoke-RestMethod $uploadUrl -Method Post -InFile $file.FullName -Headers $authorization -ContentType "application/octet-stream"
-    }
+    #$files = gci $artifact | where { ! $_.PSIsContainer }
+    #foreach ($file in $files)
+    #{
+        #Write-Host "foreach #2"
+        #$uploadUrl = $response.upload_url -replace "\{\?name\}", ("?name={0}" -f $file.Name)
+        #Write-Host ("Uploading {0} to {1}..." -f $file.FullName, $uploadUrl)
+        #Invoke-RestMethod $uploadUrl -Method Post -InFile $file.FullName -Headers $authorization -ContentType "application/octet-stream"
+    #}
 }
