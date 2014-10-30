@@ -11,8 +11,6 @@ $response = Invoke-RestMethod "https://api.github.com/repos/altso/sandbox/releas
 
 gci -Recurse
 
-[array]$artifacts = @("src")
-
 Foreach ($artifact in $artifacts)
 {
     $file = New-Object System.IO.FileInfo $artifact
