@@ -12,7 +12,7 @@ $response = Invoke-RestMethod "https://api.github.com/repos/altso/sandbox/releas
 
 gci -Recurse
 
-$artifacts = @("src")
+[array]$artifacts = @("src")
 $artifacts
 
 foreach ($artifact in $artifacts)
