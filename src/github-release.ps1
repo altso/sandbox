@@ -1,4 +1,4 @@
-Param([string]$username, [string]$password, [string[]]$artifacts)
+Param([string]$username, [string]$password, [string]$artifacts)
 
 $hash = (gci env:BUILD_VCS_NUMBER).Value
 $version = (gci env:BUILD_NUMBER).Value
@@ -9,7 +9,7 @@ $json = @{ tag_name = $name; target_commitish = $hash; name = $name; body = ("Au
 $authorization = @{ Authorization = ("Basic {0}" -f [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes(("{0}:{1}" -f $username, $password)))) }
 $response = Invoke-RestMethod "https://api.github.com/repos/altso/sandbox/releases" -Method Post -Headers $authorization -ContentType "application/json" -Body $json
 
-Foreach ($artifact in $artifacts)
+Foreach ($artifact in $artifacts.Split(';'))
 {
     $artifact
     $file = New-Object System.IO.FileInfo $artifact
