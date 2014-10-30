@@ -8,4 +8,11 @@ $name = ("v{0}" -f $version)
 $json = @{ tag_name = $name; target_commitish = $hash; name = $name; body = ("Automatic release {0}" -f $name); prerelease = $true } | ConvertTo-Json
 
 $authorization = [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes(("{0}:{1}" -f $username, $password)))
-$request = Invoke-RestMethod "https://api.github.com/repos/altso/sandbox/releases" -Method Post -Headers @{ Authorization = ("Basic {0}" -f $authorization) } -ContentType "application/json" -Body $json
+$response = Invoke-RestMethod "https://api.github.com/repos/altso/sandbox/releases" -Method Post -Headers @{ Authorization = ("Basic {0}" -f $authorization) } -ContentType "application/json" -Body $json
+
+$artifacts = "Scripts", "Backup"
+foreach ($artifact in $artifacts)
+{
+    $files = gci $artifact | where { ! $_.PSIsContainer }
+    $files
+}
