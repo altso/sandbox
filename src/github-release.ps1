@@ -19,7 +19,7 @@ $artifacts.GetType()
 $artifacts.Length
 $artifacts[0]
 
-foreach ($artifact in $artifacts)
+Foreach ($artifact in $artifacts)
 {
     Write-Host ("Looking for files in {0}..." -f $artifact)
     $files = gci $artifact | where { ! $_.PSIsContainer }
@@ -30,3 +30,15 @@ foreach ($artifact in $artifacts)
         Invoke-RestMethod $uploadUrl -Method Post -InFile $file.FullName -Headers $authorization -ContentType "application/octet-stream"
     }
 }
+
+$artifacts = @("src")
+Foreach ($artifact in $artifacts)
+{
+    Write-Host ("Looking for files in {0}..." -f $artifact)
+    $files = gci $artifact | where { ! $_.PSIsContainer }
+    Foreach ($file in $files)
+    {
+        Write-Host ("Uploading {0} to GitHub..." -f $file.FullName, $uploadUrl)
+    }
+}
+
