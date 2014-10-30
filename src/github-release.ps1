@@ -10,6 +10,8 @@ $json = @{ tag_name = $name; target_commitish = $hash; name = $name; body = ("Au
 $authorization = [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes(("{0}:{1}" -f $username, $password)))
 $response = Invoke-RestMethod "https://api.github.com/repos/altso/sandbox/releases" -Method Post -Headers @{ Authorization = ("Basic {0}" -f $authorization) } -ContentType "application/json" -Body $json
 
+gci -Recurse
+
 $artifacts = "Scripts", "Backup"
 foreach ($artifact in $artifacts)
 {
