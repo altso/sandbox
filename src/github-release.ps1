@@ -1,3 +1,5 @@
+$PSVersionTable.PSVersion
+
 $username = "81b00ad1ab7d38804f4cc69002bff2db0af1e3ae"
 $password = ""
 
@@ -13,7 +15,7 @@ $response = Invoke-RestMethod "https://api.github.com/repos/altso/sandbox/releas
 gci -Recurse
 
 [array]$artifacts = @("src")
-$artifacts
+$artifacts.GetType()
 
 foreach ($artifact in $artifacts)
 {
