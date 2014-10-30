@@ -23,7 +23,8 @@ foreach ($artifact in $artifacts)
     $files = gci $artifact | where { ! $_.PSIsContainer }
     foreach ($file in $files)
     {
-        $file
+        Write-Host "Inside foreach"
+        Write-Host $file
         $uploadUrl = $response.upload_url -replace "\{\?name\}", ("?name={0}" -f $file.Name)
         Write-Host ("Uploading {0} to {1}..." -f $file.FullName, $uploadUrl)
         Invoke-RestMethod $uploadUrl -Method Post -InFile $file.FullName -Headers $authorization -ContentType "application/octet-stream"
