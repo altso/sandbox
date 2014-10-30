@@ -12,7 +12,7 @@ $response = Invoke-RestMethod "https://api.github.com/repos/altso/sandbox/releas
 
 gci
 
-$artifacts = "src"
+$artifacts = @("src")
 foreach ($artifact in $artifacts)
 {
     Write-Host ("Looking for files in {0}..." -f $artifact)
