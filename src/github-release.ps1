@@ -12,33 +12,16 @@ $json = @{ tag_name = $name; target_commitish = $hash; name = $name; body = ("Au
 $authorization = @{ Authorization = ("Basic {0}" -f [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes(("{0}:{1}" -f $username, $password)))) }
 $response = Invoke-RestMethod "https://api.github.com/repos/altso/sandbox/releases" -Method Post -Headers $authorization -ContentType "application/json" -Body $json
 
-gci -Recurse
-
-[array]$artifacts = @("src")
-$artifacts.GetType()
-$artifacts.Length
-$artifacts[0]
-
-Foreach ($artifact in $artifacts)
-{
-    Write-Host ("Looking for files in {0}..." -f $artifact)
-    $files = gci $artifact | where { ! $_.PSIsContainer }
-    foreach ($file in $files)
-    {
-        $uploadUrl = $response.upload_url -replace "\{\?name\}", ("?{0}" -f $file.Name)
-        Write-Host ("Uploading {0} to {1}..." -f $file.FullName, $uploadUrl)
-        Invoke-RestMethod $uploadUrl -Method Post -InFile $file.FullName -Headers $authorization -ContentType "application/octet-stream"
-    }
-}
-
 $artifacts = @("src")
+
 Foreach ($artifact in $artifacts)
 {
     Write-Host ("Looking for files in {0}..." -f $artifact)
     $files = gci $artifact | where { ! $_.PSIsContainer }
     Foreach ($file in $files)
     {
-        Write-Host ("Uploading {0} to GitHub..." -f $file.FullName, $uploadUrl)
+        $uploadUrl = $response.upload_url -replace "\{\?name\}", ("?name={0}" -f $file.Name)
+        Write-Host ("Uploading {0} to {1}..." -f $file.FullName, $uploadUrl)
+        Invoke-RestMethod $uploadUrl -Method Post -InFile $file.FullName -Headers $authorization -ContentType "application/octet-stream"
     }
 }
-
