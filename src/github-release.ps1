@@ -14,12 +14,14 @@ $response = Invoke-RestMethod "https://api.github.com/repos/altso/sandbox/releas
 
 [array]$artifacts = @("src")
 $artifacts.GetType()
+$artifacts.Length
+$artifacts[0]
 
 Foreach ($artifact in $artifacts)
 {
     Write-Host ("Looking for files in {0}..." -f $artifact)
     $files = gci $artifact | where { ! $_.PSIsContainer }
-    Foreach ($file in $files)
+    foreach ($file in $files)
     {
         $uploadUrl = $response.upload_url -replace "\{\?name\}", ("?name={0}" -f $file.Name)
         Write-Host ("Uploading {0} to {1}..." -f $file.FullName, $uploadUrl)
