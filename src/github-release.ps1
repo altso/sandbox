@@ -7,14 +7,17 @@ $name = ("v{0}" -f $version)
 
 $json = @{ tag_name = $name; target_commitish = $hash; name = $name; body = ("Automatic release {0}" -f $name); prerelease = $true } | ConvertTo-Json
 
-$authorization = [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes(("{0}:{1}" -f $username, $password)))
-$response = Invoke-RestMethod "https://api.github.com/repos/altso/sandbox/releases" -Method Post -Headers @{ Authorization = ("Basic {0}" -f $authorization) } -ContentType "application/json" -Body $json
+$authorization = @{ Authorization = ("Basic {0}" -f [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes(("{0}:{1}" -f $username, $password)))) }
+$response = Invoke-RestMethod "https://api.github.com/repos/altso/sandbox/releases" -Method Post -Headers $authorization -ContentType "application/json" -Body $json
 
-gci -Recurse
-
-$artifacts = "Scripts", "Backup"
+$artifacts = "src"
 foreach ($artifact in $artifacts)
 {
     $files = gci $artifact | where { ! $_.PSIsContainer }
-    $files
+    foreach ($file in $files)
+    {
+        $uploadUrl = $response.upload_url -replace "\{\?name\}", ("?{0}" -f $file.Name)
+        Write-Host ("Uploading {0} to {1}..." -f $file.FullName, $uploadUrl)
+        Invoke-RestMethod $uploadUrl -Method Post -InFile $file.FullName -Headers $authorization -ContentType "application/octet-stream"
+    }
 }
