@@ -10,6 +10,13 @@ $response = Invoke-RestMethod ("https://api.github.com/repos/{0}/releases" -f $r
 
 Foreach ($artifact in $artifacts.Split(';'))
 {
+    If ([System.IO.Directory]::Exists($artifact))
+    {
+        $zip = [System.IO.Path]::ChangeExtension($artifact, ".zip")
+        [Reflection.Assembly]::LoadWithPartialName("System.IO.Compression.FileSystem") > $null
+        [System.IO.Compression.ZipFile]::CreateFromDirectory($artifact, $zip)
+        $artifact = $zip
+    }
     $file = New-Object System.IO.FileInfo $artifact
     $uploadUrl = $response.upload_url -replace "\{\?name\}", ("?name={0}" -f $file.Name)
     Write-Host ("Uploading {0} to {1}..." -f $file.FullName, $uploadUrl)
