@@ -12,7 +12,7 @@ Foreach ($artifact in $artifacts.Split(';'))
 {
     If ([System.IO.Directory]::Exists($artifact))
     {
-        $zip = [System.IO.Path]::ChangeExtension($artifact, ".zip")
+        $zip = $artifact + ".zip"
         [Reflection.Assembly]::LoadWithPartialName("System.IO.Compression.FileSystem") > $null
         [System.IO.Compression.ZipFile]::CreateFromDirectory($artifact, $zip)
         $artifact = $zip
