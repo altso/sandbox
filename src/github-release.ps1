@@ -14,6 +14,10 @@ Foreach ($artifact in $artifacts.Split(';'))
     {
         $zip = $artifact + ".zip"
         [Reflection.Assembly]::LoadWithPartialName("System.IO.Compression.FileSystem") > $null
+        If ([System.IO.File]::Exists($zip))
+        {
+            ri $zip
+        }
         [System.IO.Compression.ZipFile]::CreateFromDirectory($artifact, $zip)
         $artifact = $zip
     }
